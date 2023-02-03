@@ -96,7 +96,7 @@ class HHSHCCEngine:
         # rxc
         cc_dct.update({ndc:self.ndc2rxc[ndc] for ndc in rx_lst
                         if ndc in self.ndc2rxc})
-        cc_dct.update({hcpcs:self.hcpcs2rxc[pr] for pr in pr_lst
+        cc_dct.update({pr:self.hcpcs2rxc[pr] for pr in pr_lst
                         if pr in self.hcpcs2rxc})
 
         cc_dct = I0V05ED2.apply_agesex_edits(cc_dct, age, sex)
