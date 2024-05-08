@@ -115,6 +115,8 @@ class HHSHCCEngine:
             cc_dct = I0V05ED2.apply_agesex_edits(cc_dct, age, sex)
         elif self.myear == "2022":
             cc_dct = I0V07ED1.apply_agesex_edits(cc_dct, age, sex)
+        else:
+            raise (Exception(f"Invalid version: {self.myear}"))
 
         hcc_lst_0 = self._apply_hierarchy(cc_dct, age, sex)
         hcc_lst = self._apply_interactions(hcc_lst_0, agegroup, age)
