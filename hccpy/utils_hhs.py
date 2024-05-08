@@ -1,6 +1,8 @@
 import csv
 import re
+
 from pkg_resources import resource_filename as rscfn
+
 
 def padded_cc(cc):
     cc = cc.replace(".","_")
@@ -41,7 +43,7 @@ def read_coefn(fn):
             if row[0] == "":
                 continue
             agegrp = row[0]
-            varname = row[1]
+            varname = row[1].upper()
             values = {"P": float(row[3]),
                     "G": float(row[4]),
                     "S": float(row[5]),
@@ -78,4 +80,3 @@ def read_label(fn):
             v = matches[0][2].strip()
             labels[k] = v 
     return labels
-
