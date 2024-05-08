@@ -1,11 +1,11 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(packages=find_packages(),
     name="hccpy",
-    version="0.1.10",
+    version="0.1.11",
     description="hccpy is a Python implementation of HCC",
     long_description=long_description,
     long_description_content_type="text/markdown",
