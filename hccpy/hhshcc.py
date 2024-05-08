@@ -1,15 +1,19 @@
-import numpy as np
 from collections import Counter
+
+import numpy as np
+
+import hccpy._AGESEXV6 as AGESEXV6  # age/sex variables
+import hccpy._CY22M07A as CY22M07A  # interactions 2019
+import hccpy._I0V05ED2 as I0V05ED2  # age/sex edits
+import hccpy._V0519F3M as V0519F3M  # interactions 2019
+import hccpy._V0519F3P as V0519F3P  # risk coefn
 import hccpy.utils_hhs as utils
-import hccpy._AGESEXV6 as AGESEXV6 # age/sex variables
-import hccpy._I0V05ED2 as I0V05ED2 # age/sex edits
-import hccpy._V0519F3M as V0519F3M # interactions
-import hccpy._V0519F3P as V0519F3P # risk coefn 
+
 
 class HHSHCCEngine:
 
     def __init__(self, myear="2022"):
-        
+
         fnmaps = {
                 "2019": {
                     "dx2cc": "data/H0519F3.FY 2019 ICD10.TXT",
@@ -44,14 +48,20 @@ class HHSHCCEngine:
             if k in cc_cnt:
                 for v_i in v:
                     cc_cnt[v_i] -= 1
-       
+
         cc_lst = [k for k, v in cc_cnt.items() if v > 0]
         return cc_lst
 
     def _apply_interactions(self, cc_lst, agegroup, age):
         """Returns a list of HCCs after applying interactions.
         """
-        cc_lst = V0519F3M.create_interactions(cc_lst, agegroup, age)
+        if self.myear == "2019":
+            cc_lst = V0519F3M.create_interactions(cc_lst, agegroup, age)
+        elif self.myear == "2022":
+            cc_lst = CY22M07A.create_interactions(cc_lst, agegroup, age)
+        else:
+            raise (Exception(f"Invalid version: {self.myear}"))
+
         return cc_lst
 
     def _sexmap(self, sex):
@@ -93,7 +103,7 @@ class HHSHCCEngine:
         # dx2cc
         dx_set = {dx.strip().upper().replace(".","") for dx in dx_lst}
         cc_dct = {dx:self.dx2cc[dx] for dx in dx_set if dx in self.dx2cc}
-        
+
         # rxc
         cc_dct.update({ndc:self.ndc2rxc[ndc] for ndc in rx_lst
                         if ndc in self.ndc2rxc})
@@ -158,7 +168,3 @@ class HHSHCCEngine:
             }
 
         return out
-
-
-
-
