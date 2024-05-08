@@ -3,8 +3,9 @@ from collections import Counter
 import numpy as np
 
 import hccpy._AGESEXV6 as AGESEXV6  # age/sex variables
-import hccpy._CY22M07A as CY22M07A  # interactions 2019
-import hccpy._I0V05ED2 as I0V05ED2  # age/sex edits
+import hccpy._CY22M07A as CY22M07A  # interactions 2022
+import hccpy._I0V05ED2 as I0V05ED2  # age/sex edits 2019
+import hccpy._I0V07ED1 as I0V07ED1  # age/sex edits 2022
 import hccpy._V0519F3M as V0519F3M  # interactions 2019
 import hccpy._V0519F3P as V0519F3P  # risk coefn
 import hccpy.utils_hhs as utils
@@ -110,11 +111,15 @@ class HHSHCCEngine:
         cc_dct.update({pr:self.hcpcs2rxc[pr] for pr in pr_lst
                         if pr in self.hcpcs2rxc})
 
-        cc_dct = I0V05ED2.apply_agesex_edits(cc_dct, age, sex)
+        if self.myear == "2019":
+            cc_dct = I0V05ED2.apply_agesex_edits(cc_dct, age, sex)
+        elif self.myear == "2022":
+            cc_dct = I0V07ED1.apply_agesex_edits(cc_dct, age, sex)
+
         hcc_lst_0 = self._apply_hierarchy(cc_dct, age, sex)
         hcc_lst = self._apply_interactions(hcc_lst_0, agegroup, age)
-        risk_dct = V0519F3P.get_risk_dct(self.coefn, hcc_lst, 
-                                    agesexvar, agegroup, enroll_dur, plate) 
+        risk_dct = V0519F3P.get_risk_dct(self.coefn, hcc_lst,
+                                    agesexvar, agegroup, enroll_dur, plate)
 
         score = np.sum([x for x in risk_dct.values()])
         out = {
