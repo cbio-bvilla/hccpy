@@ -96,7 +96,7 @@ def _adult(cc_lst):
 
     x["RXC_01_X_HCC001"] = x["RXC_01"] * x["HHS_HCC001"]
     # Renamed from "RXC_02_x_HCC037_1_036_035s_034" in CY22M07A.txt to match to name in Table 9
-    x["RXC_02_x_HCC037_1_036_035_2_035_1_034"] = x["RXC_02"] * (
+    x["RXC_02_X_HCC037_1_036_035_2_035_1_034"] = x["RXC_02"] * (
         x["HHS_HCC037_1"]
         + x["HHS_HCC034"]
         + x["HHS_HCC035_1"]
